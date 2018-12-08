@@ -1,0 +1,5 @@
+<div *ngIf="!authService.isLoggedIn()" class="alert alert-danger">
+  <strong>ERROR: Unauthorized.</strong>
+</div>
+
+<h3 *ngIf="authService.isLoggedIn()">Go to your <a [routerLink]="['/profile']">profile</a></h3>
