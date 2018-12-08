@@ -4,7 +4,7 @@ A Simple auhentication Node.js app using Express.js, Mongodb and Angular.
 
 ## Running Locally
 
-Make sure you have [Node.js](http://nodejs.org/) installed.
+Make sure you have both [Node.js](http://nodejs.org/) and [MongoDB](https://www.mongodb.com/) installed.
 
 ```sh
 git clone https://github.com/MuhammadAlsaied/mean-auth-starter-app.git # or clone your own fork
