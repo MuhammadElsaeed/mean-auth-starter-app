@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require('../models/user');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
-const config = require('../config/config');
+const config = require('dotenv').config();
 
 
 //register route
@@ -15,7 +15,6 @@ router.post("/register", (req, res, next) => {
     password: req.body.password,
     username: req.body.username
   });
-  console.log(newUser);
   if (newUser.firstName == null || newUser.lastName == null || newUser.email == null ||
     newUser.password == null || newUser.username == null) {
     res.status(400);
@@ -92,7 +91,7 @@ router.post("/auth", (req, res, next) => {
             msg: "Incorrect password!"
           });
         } else {
-          const token = jwt.sign(user.toJSON(), config.secret, {
+          const token = jwt.sign(user.toJSON(), process.env.SECRET, {
             expiresIn: 604800
           });
           res.json({
