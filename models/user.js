@@ -31,6 +31,12 @@ module.exports.getUserById = function(id, callback) {
   User.findById(id, callback);
 };
 
+module.exports.deleteUserById = function(id, callback) {
+  User.deleteOne({
+    _id: id
+  }, callback);
+};
+
 module.exports.getUserByUsername = function(username, callback) {
   const query = {
     username: username
@@ -62,6 +68,8 @@ module.exports.addUser = function(user, callback) {
 
   });
 };
+
+
 module.exports.comparePassword = function(pwd, hash, callback) {
   bcrypt.compare(pwd, hash, (err, isMatch) => {
     callback(err, isMatch);

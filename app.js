@@ -1,6 +1,5 @@
 // load environment variables
 require('dotenv').config();
-
 // import dependencies
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -22,7 +21,7 @@ mongoose.connect(process.env.DB_URL, {
   useNewUrlParser: true
 });
 
-// configure middlewres
+// configure middlewares
 app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(passport.session());

@@ -1,0 +1,17 @@
+version: '3'
+services:
+  app:
+    container_name: meanauthapp
+    restart: always
+    build: .
+    ports:
+      - '3001:3000'
+    environment:
+      DB_URL: mongodb://localhost:27017/meanauth
+    depends_on:
+      - mongo
+  mongo:
+    container_name: mongo
+    image: mongo
+    ports:
+      - '27017:27017'
