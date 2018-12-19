@@ -13,62 +13,52 @@ router.post("/register", (req, res, next) => {
     lastName: req.body.lastName,
     email: req.body.email,
     password: req.body.password,
-    username: req.body.username
+    role: "ADMIN"
   });
   if (newUser.firstName == null || newUser.lastName == null || newUser.email == null ||
-    newUser.password == null || newUser.username == null) {
+    newUser.password == null) {
     res.status(400);
     return res.json({
       success: false,
       msg: "please fill all fields"
     });
   };
-  User.getUserByUsername(newUser.username, (err, user) => {
+
+  User.getUserByEmail(newUser.email, (err, user1) => {
     if (err) {
       throw err;
     }
-    if (user) {
+    if (user1) {
       res.json({
         success: false,
-        msg: "The username already exists! choose another one."
+        msg: "The email already exists! choose another one."
       });
     } else {
-      User.getUserByEmail(newUser.email, (err, user1) => {
-        if (err) {
-          throw err;
-        }
-        if (user1) {
-          res.json({
-            success: false,
-            msg: "The email already exists! choose another one."
+      User.addUser(newUser, (err, user) => {
+        if (!err) {
+          return res.json({
+            success: true,
+            msg: "User registered successfuly "
           });
         } else {
-          User.addUser(newUser, (err, user) => {
-            if (!err) {
-              return res.json({
-                success: true,
-                msg: "User registered successfuly "
-              });
-            } else {
-              res.status(400);
-              return res.json({
-                success: false,
-                msg: err.message
-              });
-            }
-
+          res.status(400);
+          return res.json({
+            success: false,
+            msg: err.message
           });
         }
+
       });
     }
   });
+
 });
 
 //authenticate route
 router.post("/auth", (req, res, next) => {
-  const username = req.body.username;
+  const email = req.body.email;
   const password = req.body.password;
-  User.getUserByUsername(username, (err, user) => {
+  User.getUserByEmail(email, (err, user) => {
     if (err) {
       return res.json({
         success: false,
@@ -91,7 +81,13 @@ router.post("/auth", (req, res, next) => {
             msg: "Incorrect password!"
           });
         } else {
-          const token = jwt.sign(user.toJSON(), process.env.SECRET, {
+          const token = jwt.sign({
+            _id: user._id,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            role: user.role
+          }, process.env.JWT_SECRET, {
             expiresIn: 604800
           });
           res.json({
@@ -99,10 +95,10 @@ router.post("/auth", (req, res, next) => {
             token: 'JWT ' + token,
             user: {
               id: user._id,
-              username: user.username,
+              email: user.email,
               firstName: user.firstName,
               lastName: user.lastName,
-              email: user.email
+              role: user.role
             }
           });
         }
@@ -112,10 +108,11 @@ router.post("/auth", (req, res, next) => {
 
 });
 //profile route
-router.get(["/profile", "/"], passport.authenticate('jwt', {
+router.get(["/profile"], passport.authenticate('jwt', {
   session: false
 }), (req, res, next) => {
   res.json(req.user);
 });
+
 
 module.exports = router;

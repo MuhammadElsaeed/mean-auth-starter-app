@@ -8,7 +8,7 @@ export class ValidateService {
   constructor() { }
 
   validateNotEmpty(user) {
-    return user.firstName && user.lastName && user.email && user.password && user.username;
+    return user.firstName && user.lastName && user.email && user.password;
   }
 
   validateEmail(email) {

@@ -1,18 +1,25 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-
-import { HomeComponent } from './components/home/home.component';
-import { ProfileComponent } from './components/profile/profile.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { RegisterComponent } from './components/register/register.component';
-import { LoginComponent } from './components/login/login.component';
-import { AuthGuard } from './guards/auth.guard'
+import { RoleGuard } from './guards/role.guard'
 const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
-  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
-{ path: 'register', component: RegisterComponent },
-{ path: 'login', component: LoginComponent }
+  {
+    path: '',
+    loadChildren: './website/website.module#WebsiteModule'
+  },
+  {
+    path: 'manage',
+    loadChildren: './manage/manage.module#ManageModule',
+    data: {
+      allowedRoles: ['ADMIN']
+    },
+    canLoad: [RoleGuard]
+  },
+  {
+    path: '**',
+    redirectTo: '',
+    pathMatch: 'full'
+  },
+
 ];
 
 @NgModule({

@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ValidateService } from '../../services/validate.service';
-import { AuthService } from '../../services/auth.service';
+
+import { ValidateService } from '../../../services/validate.service';
+import { AuthService } from '../../../services/auth.service';
+
 import { FlashMessagesService } from 'angular2-flash-messages';
 @Component({
   selector: 'app-register',
@@ -12,7 +14,6 @@ export class RegisterComponent implements OnInit {
 
   firstName: String;
   lastName: String;
-  username: String;
   email: String;
   password: String;
 
@@ -25,7 +26,6 @@ export class RegisterComponent implements OnInit {
     let user = {
       firstName: this.firstName,
       lastName: this.lastName,
-      username: this.username,
       email: this.email,
       password: this.password
     }
@@ -47,6 +47,10 @@ export class RegisterComponent implements OnInit {
           this.flashMessagesService.show(res.msg, { cssClass: 'alert-danger', timeout: 3000 });
           this.router.navigate(['/register']);
         }
+      }, err => {
+        console.log(err.message);
+        this.flashMessagesService.show('ERROR: Something went wrong, please try again later.', { cssClass: 'alert-danger', timeout: 3000 });
+
       });
     }
   }

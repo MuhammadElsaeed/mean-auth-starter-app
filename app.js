@@ -2,6 +2,7 @@
 require('dotenv').config();
 // import dependencies
 const express = require('express');
+const path = require('path');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const passport = require('passport');
@@ -26,12 +27,11 @@ app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(cors());
-app.use(express.static("public"));
-app.use("/users", users);
-app.get('*', (req, res) => {
-  res.redirect('/');
+app.use(express.static('public'));
+app.use("/api/users", users);
+app.get('*', function (req, res, next) {
+    res.sendFile(path.resolve('public/index.html'));
 });
-
 // start server
 app.listen(port, function() {
   console.log("Server started on port " + port);

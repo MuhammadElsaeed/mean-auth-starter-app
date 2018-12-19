@@ -12,7 +12,7 @@ export function getToken() {
   providedIn: 'root'
 })
 export class AuthService {
-  url = '';
+  url = 'api/';
 
   constructor(private http: HttpClient, private jwtHelper: JwtHelperService) { }
 
@@ -38,5 +38,13 @@ export class AuthService {
 
   isLoggedIn() {
     return !this.jwtHelper.isTokenExpired();
+  }
+  isAllowed(allowedRoles){
+    if(!this.isLoggedIn()){
+      return false;
+    }
+    let user = JSON.parse(localStorage.getItem('user'));
+    let role = user.role;
+    return allowedRoles.includes(role);
   }
 }

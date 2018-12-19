@@ -23,4 +23,4 @@ git clone https://github.com/MuhammadAlsaied/mean-auth-starter-app.git # or clon
 docker-compose up
 ```
 
-Your app should now be running on [localhost:3000](http://localhost:3001/).
+Your app should now be running on [localhost:3001](http://localhost:3001/).

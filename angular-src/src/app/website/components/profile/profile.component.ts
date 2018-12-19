@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
 @Component({
   selector: 'app-profile',
@@ -18,6 +18,7 @@ export class ProfileComponent implements OnInit {
         this.user = profile;
       },
       err => {
+        console.log(err.message);
         this.error = "ERROR: Unauthorized."
       }
     );

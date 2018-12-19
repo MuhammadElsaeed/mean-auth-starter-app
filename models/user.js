@@ -14,21 +14,20 @@ const userSchema = mongoose.Schema({
     type: String,
     required: true
   },
-  username: {
-    type: String,
-    required: true
-  },
   password: {
     type: String,
     required: true
+  },
+  role: {
+    type: String,
+    required: true
   }
-
 });
 
 const User = module.exports = mongoose.model("User", userSchema);
 
 module.exports.getUserById = function(id, callback) {
-  User.findById(id, callback);
+  User.findById(id, callback).select('-password');
 };
 
 module.exports.deleteUserById = function(id, callback) {
@@ -36,14 +35,6 @@ module.exports.deleteUserById = function(id, callback) {
     _id: id
   }, callback);
 };
-
-module.exports.getUserByUsername = function(username, callback) {
-  const query = {
-    username: username
-  };
-  User.findOne(query, callback);
-};
-
 
 module.exports.getUserByEmail = function(email, callback) {
   const query = {
