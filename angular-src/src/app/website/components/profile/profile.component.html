@@ -6,5 +6,7 @@
   <h2 class="page-header">{{'Welcome '+user.firstName+' '+user.lastName}}</h2>
   <ul class="list-group">
     <li class="list-group-item">{{user.email}}</li>
+    <li class="list-group-item">{{user.dateOfBirth | date}}</li>
+    <li class="list-group-item">{{user.country+" - "+user.state}}</li>
   </ul>
 </div>

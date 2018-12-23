@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { FlashMessagesService } from 'angular2-flash-messages';
 
 export function getToken() {
   return localStorage.getItem('id_token');
@@ -12,12 +11,12 @@ export function getToken() {
   providedIn: 'root'
 })
 export class AuthService {
-  url = 'api/';
+  url = '/api/';
 
   constructor(private http: HttpClient, private jwtHelper: JwtHelperService) { }
 
   registerUser(user): any {
-    return this.http.post(this.url + 'users/register', user).pipe(
+    return this.http.post(this.url + 'users', user).pipe(
       map(response => response));
   }
   authenticateUser(user): any {
@@ -26,7 +25,6 @@ export class AuthService {
   }
   storeUSerData(token, user) {
     localStorage.setItem('id_token', token);
-    localStorage.setItem('user', JSON.stringify(user));
   }
   logout() {
     localStorage.clear();
@@ -43,7 +41,7 @@ export class AuthService {
     if(!this.isLoggedIn()){
       return false;
     }
-    let user = JSON.parse(localStorage.getItem('user'));
+    const user = this.jwtHelper.decodeToken(getToken());
     let role = user.role;
     return allowedRoles.includes(role);
   }

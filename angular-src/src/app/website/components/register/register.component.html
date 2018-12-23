@@ -1,17 +1,82 @@
-<form (submit)="onRegisterForm()" class="form-signup">
+<div *ngIf="error" class="alert alert-danger">
+{{error}}
+</div>
+
+<form [formGroup]="registerForm" (submit)="onRegisterForm()" class="form-signup" method="post">
   <h1 class="h3 mb-3 font-weight-normal">Join us!</h1>
   <label for="firstName" class="sr-only">First Name</label>
-  <input type="text" [(ngModel)]="firstName" name="firstName" class="form-control" placeholder="First Name" required autofocus>
+  <input type="text" formControlName="firstName" name="firstName" class="form-control" placeholder="First Name" required autofocus>
+  <div *ngIf="form.firstName.errors && (form.firstName.touched || submitted) ">
+    <div *ngIf="form.firstName.errors.required" class="text-danger">First name is required.</div>
+  </div>
+  <br />
 
-  <label for="lastName" class="sr-only">Email address</label>
-  <input type="text" [(ngModel)]="lastName" name="lastName" class="form-control" placeholder="Last Name" required autofocus>
+  <label for="lastName" class="sr-only">lastName</label>
+  <input type="text" formControlName="lastName" name="lastName" class="form-control" placeholder="Last Name" required autofocus>
+  <div *ngIf="form.lastName.errors && (form.lastName.touched || submitted)">
+    <div *ngIf="form.lastName.errors.required" class="text-danger">Last name is required.</div>
+  </div>
+  <br />
+
+  <label for="dateOfBirth" class="sr-only">Date of birth</label>
+  <input type="text" formControlName="dateOfBirth" name="dateOfBirth" onfocus="this.type='date'" class="form-control" placeholder="Date of birth" required autofocus>
+  <div *ngIf="form.dateOfBirth.errors && (form.dateOfBirth.touched || submitted)">
+    <div *ngIf="form.dateOfBirth.errors.required" class="text-danger">Date of birth is required.</div>
+    <div *ngIf="form.dateOfBirth.errors.invalidformat" class="text-danger">Invalid date format.</div>
+    <div *ngIf="form.dateOfBirth.errors.minage" class="text-danger">You are too young.</div>
+  </div>
+  <br />
+
+  <label for="gender" class="sr-only">Gender</label>
+  <select class="form-control" name="gender" formControlName="gender" required autofocus>
+    <option>MALE</option>
+    <option>FEMALE</option>
+  </select>
+  <div *ngIf="form.gender.errors && (form.gender.touched || submitted)">
+    <div *ngIf="form.gender.errors.required" class="text-danger">Gender is required.</div>
+  </div>
+  <br />
+
+  <label for="country" class="sr-only">Country</label>
+  <input type="text" formControlName="country" name="country" class="form-control" placeholder="Country" required autofocus>
+  <div *ngIf="form.country.errors && (form.country.touched || submitted)">
+    <div *ngIf="form.country.errors.required" class="text-danger">Country is required.</div>
+  </div>
+  <br />
+
+  <label for="state" class="sr-only">State</label>
+  <input type="text" formControlName="state" name="state" class="form-control" placeholder="State" required autofocus>
+  <div *ngIf="form.state.errors && (form.state.touched|| submitted) ">
+    <div *ngIf="form.state.errors.required" class="text-danger">State is required.</div>
+  </div>
+  <br />
+
+  <label for="jobTitle" class="sr-only">Job title</label>
+  <input type="text" formControlName="jobTitle" name="jobTitle" class="form-control" placeholder="Job title" required autofocus>
+  <div *ngIf="form.jobTitle.errors && (form.jobTitle.touched || submitted)">
+    <div *ngIf="form.jobTitle.errors.required" class="text-danger">Job title is required.</div>
+  </div>
+  <br />
+
+  <label for="bio" class="sr-only">Biography</label>
+  <textarea formControlName="bio" name="bio" class="form-control" placeholder="Biography" autofocus></textarea>
   <hr>
 
   <label for="email" class="sr-only">Email Address</label>
-  <input type="email" [(ngModel)]="email" name="email" class="form-control" placeholder="email" required autofocus>
+  <input type="email" formControlName="email" name="email" class="form-control" placeholder="email" required autofocus>
+  <div *ngIf="form.email.errors && (form.email.touched|| submitted) ">
+    <div *ngIf="form.email.errors.required" class="text-danger">Email is required.</div>
+    <div *ngIf="form.email.errors.email" class="text-danger">Please enter a valid email.</div>
+  </div>
+  <br />
 
   <label for="password" class="sr-only">Password</label>
-  <input type="password" [(ngModel)]="password" name="password" class="form-control" placeholder="Password" required>
+  <input type="password" formControlName="password" name="password" class="form-control" placeholder="Password" required>
+  <div *ngIf="form.password.errors && (form.password.touched || submitted)">
+    <div *ngIf="form.password.errors.required" class="text-danger">Password is required.</div>
+    <div *ngIf="form.password.errors.minlength" class="text-danger">Password must be at least {{form.password.errors.minlength.requiredLength}} characters.</div>
+  </div>
+  <br />
 
-  <button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
+  <button class="btn btn-lg btn-primary btn-block" [disabled]="isBusy" type="submit">Sign up</button>
 </form>

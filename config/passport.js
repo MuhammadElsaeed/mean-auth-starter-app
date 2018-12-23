@@ -1,7 +1,8 @@
+'use strict';
+
 const JwtStrategy = require('passport-jwt').Strategy;
-const FacebookStrategy = require('passport-facebook').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
-const User = require('../models/user');
+const User = require('../user/user');
 module.exports = function(passport) {
 
 

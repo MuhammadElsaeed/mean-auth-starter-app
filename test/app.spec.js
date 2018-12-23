@@ -1,9 +1,11 @@
+'use strict';
+
 require('dotenv').config();
 const mongoose = require('mongoose');
 mongoose.connect(process.env.DB_URL, {
-  useNewUrlParser: true
+  useNewUrlParser: true,
 });
 
 
-//test files
-require('./models/user');
+// test files
+require('../user/user.spec');

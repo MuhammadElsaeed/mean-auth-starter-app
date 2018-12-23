@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { WebsiteRoutingModule } from './website-routing.module';
 
@@ -31,6 +31,7 @@ import { FlashMessagesModule } from 'angular2-flash-messages';
     CommonModule,
     WebsiteRoutingModule,
     FormsModule,
+    ReactiveFormsModule,
     FlashMessagesModule.forRoot()
 
   ],

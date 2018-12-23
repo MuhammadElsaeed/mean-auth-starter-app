@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { ValidateService } from '../../../services/validate.service';
 import { AuthService } from '../../../services/auth.service';
@@ -11,47 +12,57 @@ import { FlashMessagesService } from 'angular2-flash-messages';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-
-  firstName: String;
-  lastName: String;
-  email: String;
-  password: String;
-
+  registerForm: FormGroup;
+  submitted: Boolean = false;
+  error: String;
+  isBusy = false;
   constructor(private validateService: ValidateService, private flashMessagesService: FlashMessagesService,
-    private authService: AuthService, private router: Router) { }
+    private authService: AuthService, private router: Router, private formBuilder: FormBuilder) { }
 
   ngOnInit() {
+    this.registerForm = this.formBuilder.group({
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      dateOfBirth: ['', [Validators.required, this.validateService.validateDate(10)]],
+      bio: [''],
+      jobTitle: ['', Validators.required],
+      gender: ['MALE', Validators.required],
+      country: ['', Validators.required],
+      state: ['', Validators.required]
+    });
   }
-  onRegisterForm() {
-    let user = {
-      firstName: this.firstName,
-      lastName: this.lastName,
-      email: this.email,
-      password: this.password
-    }
-    if (!this.validateService.validateNotEmpty(user)) {
-      this.flashMessagesService.show('Please fill all fields.', { cssClass: 'alert-danger', timeout: 3000 });
-      this.router.navigate(['/register']);
-      return false;
-    }
-    else if (!this.validateService.validateEmail(user.email)) {
-      this.flashMessagesService.show('Please write a valid email.', { cssClass: 'alert-danger', timeout: 3000 });
-      this.router.navigate(['/register']);
-      return false;
-    } else {
-      this.authService.registerUser(user).subscribe(res => {
-        if (res.success) {
-          this.flashMessagesService.show('You registerd successfully', { cssClass: 'alert-success', timeout: 3000 });
-          this.router.navigate(['/login']);
-        } else {
-          this.flashMessagesService.show(res.msg, { cssClass: 'alert-danger', timeout: 3000 });
-          this.router.navigate(['/register']);
-        }
-      }, err => {
-        console.log(err.message);
-        this.flashMessagesService.show('ERROR: Something went wrong, please try again later.', { cssClass: 'alert-danger', timeout: 3000 });
 
-      });
+  get form() { return this.registerForm.controls; }
+
+  onRegisterForm() {
+    this.isBusy = true;
+    this.submitted = true;
+    window.scrollTo(0, 0);
+
+    if (this.registerForm.invalid) {
+      this.error = "Please check all fields.";
+      this.isBusy = false;
+      return;
     }
+    this.authService.registerUser(this.registerForm.getRawValue()).subscribe(res => {
+      if (res.success) {
+        this.flashMessagesService.show('You registerd successfully', { cssClass: 'alert-success', timeout: 3000 });
+        this.error = null;
+        this.router.navigate(['/login']);
+      } else {
+        this.error = res.msg;
+        this.router.navigate(['/register']);
+      }
+    }, err => {
+      if (err.status == 400) {
+        this.error = err.error.msg;
+        this.router.navigate(['/register']);
+      } else {
+        this.error = "ERROR: Something went wrong, please try again later.";
+      }
+    });
+    this.isBusy = true;
   }
 }

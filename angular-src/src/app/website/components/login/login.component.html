@@ -1,10 +1,24 @@
-<form (submit)="onLoginForm()" class="form-login">
-  <h1 class="h3 mb-3 font-weight-normal">Login</h1>
+<div *ngIf="error" class="alert alert-danger">
+  {{error}}
+</div>
 
-  <label for="email" class="sr-only">Email</label>
-  <input type="text" [(ngModel)]="email" name="email" class="form-control" placeholder="email" required autofocus>
+<form [formGroup]="loginForm" (submit)="onLoginForm()" class="form-login" method="post">
+
+  <label for="email" class="sr-only">Email Address</label>
+  <input type="email" formControlName="email" name="email" class="form-control" placeholder="email" required autofocus>
+  <div *ngIf="form.email.errors && (form.email.touched|| submitted) ">
+    <div *ngIf="form.email.errors.required" class="text-danger">Please enter your email.</div>
+    <div *ngIf="form.email.errors.email" class="text-danger">Please enter a valid email.</div>
+  </div>
+  <br />
 
   <label for="password" class="sr-only">Password</label>
-  <input type="password" [(ngModel)]="password" name="password" class="form-control" placeholder="Password" required>
-  <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+  <input type="password" formControlName="password" name="password" class="form-control" placeholder="Password" required>
+  <div *ngIf="form.password.errors && (form.password.touched || submitted)">
+    <div *ngIf="form.password.errors.required" class="text-danger">Please enter your password.</div>
+    <div *ngIf="form.password.errors.minlength" class="text-danger">Password must be at least {{form.password.errors.minlength.requiredLength}} characters.</div>
+  </div>
+  <br />
+
+  <button class="btn btn-lg btn-primary btn-block" [disabled]="isBusy" type="submit">Sign up</button>
 </form>

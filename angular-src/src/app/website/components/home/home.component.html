@@ -4,8 +4,8 @@
        <p class="lead text-muted">
          Simple Authentication app for starting your project using Mean stack
        <p *ngIf="!authService.isLoggedIn()" >
-         <a [routerLink]="['register']"class="btn btn-primary my-2">Register</a>
-         <a [routerLink]="['login']"class="btn btn-secondry my-2">Login</a>
+         <a [routerLink]="['/register']"class="btn btn-primary my-2">Register</a>
+         <a [routerLink]="['/login']"class="btn btn-secondry my-2">Login</a>
        </p>
 
      </div>
